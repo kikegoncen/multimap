@@ -53,9 +53,10 @@ export default function MapCanvas({ onFeatureCount }: MapCanvasProps) {
   // ---------------------------------------------------------------------
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
+    const container = containerRef.current;
 
     const map = new maplibregl.Map({
-      container: containerRef.current,
+      container,
       style: BASEMAP_STYLES.claro,
       center: CDMX_CENTER,
       zoom: 11,
@@ -73,7 +74,30 @@ export default function MapCanvas({ onFeatureCount }: MapCanvasProps) {
       setReady(true);
     });
 
+    // Blindaje contra el bug clásico de mapas GL en apps React/Next.js: el
+    // contenedor puede no tener aún su tamaño final en el momento exacto en
+    // que se construye el mapa (por timing de layout, animaciones, o fuentes
+    // cargando), y MapLibre se queda "congelado" con un canvas del tamaño
+    // equivocado si nadie le avisa que el contenedor cambió. Este bloque hace
+    // que el mapa se autocorrija sin depender de que el CSS esté perfecto:
+    // reacciona a cualquier cambio real de tamaño del contenedor, a cambios
+    // de tamaño de ventana, y además fuerza unos resize() de cortesía tras el
+    // montaje por si el primer resize real ocurre antes de que MapLibre esté
+    // listo para escucharlo.
+    const resizeObserver = new ResizeObserver(() => map.resize());
+    resizeObserver.observe(container);
+
+    const onWindowResize = () => map.resize();
+    window.addEventListener('resize', onWindowResize);
+
+    const cortesiaTimeouts = [100, 400, 1000, 2000].map((ms) =>
+      setTimeout(() => map.resize(), ms),
+    );
+
     return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener('resize', onWindowResize);
+      cortesiaTimeouts.forEach(clearTimeout);
       map.remove();
       mapRef.current = null;
     };

@@ -8,13 +8,14 @@ import {
   PointElement,
   CategoryScale,
   LinearScale,
+  Filler,
   Tooltip,
   Legend,
 } from 'chart.js';
 import { Doughnut, Bar, Line } from 'react-chartjs-2';
 import { GIRO_CONFIG, type Giro } from '@/types/denue';
 
-ChartJS.register(ArcElement, BarElement, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend);
+ChartJS.register(ArcElement, BarElement, LineElement, PointElement, CategoryScale, LinearScale, Filler, Tooltip, Legend);
 
 const FONT = { family: 'Inter, ui-sans-serif, system-ui, sans-serif', size: 11 };
 
