@@ -1,19 +1,46 @@
 'use client';
 
 import { useEffect, useRef, useState, useCallback } from 'react';
-import maplibregl, { type Map as MLMap, type MapLayerMouseEvent } from 'maplibre-gl';
+import maplibregl, { type Map as MLMap, type MapLayerMouseEvent, type StyleSpecification } from 'maplibre-gl';
 import * as h3 from 'h3-js';
 import * as turf from '@turf/turf';
-import { useLayerStore, type BaseMapStyle } from '@/stores/useLayerStore';
+import { useLayerStore } from '@/stores/useLayerStore';
 import { useMapModeStore } from '@/stores/useMapModeStore';
 import { loadGiroLayer, loadH3Grid } from '@/lib/data/loadLayers';
 import { GIRO_CONFIG, type Establecimiento, type EstablecimientoFeature, type Giro, type H3Cell } from '@/types/denue';
 import { competidoresEnRadio, dbscanClusters, featuresEnViewport } from '@/lib/geo/turf-analysis';
 
-const BASEMAP_STYLES: Record<BaseMapStyle, string> = {
-  claro: 'https://tiles.openfreemap.org/styles/positron',
-  oscuro: 'https://tiles.openfreemap.org/styles/dark',
-  satelite: 'https://tiles.openfreemap.org/styles/liberty',
+/**
+ * Mapa base único: satélite híbrido (imagen + calles/etiquetas encima).
+ * Se usa un único estilo fijo — sin selector de mapa base — porque cambiar
+ * de estilo en caliente (setStyle) obliga a reconstruir todas las fuentes y
+ * capas propias del geovisor, y es una fuente recurrente de bugs sutiles.
+ * Fuente: Esri World Imagery + Esri Reference/World Boundaries and Places
+ * (ambos públicos, sin API key).
+ */
+const SATELLITE_HYBRID_STYLE: StyleSpecification = {
+  version: 8,
+  sources: {
+    'esri-imagery': {
+      type: 'raster',
+      tiles: [
+        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+      ],
+      tileSize: 256,
+      attribution: 'Imagery © Esri, Maxar, Earthstar Geographics',
+    },
+    'esri-labels': {
+      type: 'raster',
+      tiles: [
+        'https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',
+      ],
+      tileSize: 256,
+    },
+  },
+  layers: [
+    { id: 'esri-imagery', type: 'raster', source: 'esri-imagery' },
+    { id: 'esri-labels', type: 'raster', source: 'esri-labels' },
+  ],
 };
 
 const CDMX_CENTER: [number, number] = [-99.1332, 19.4326];
@@ -30,7 +57,6 @@ export default function MapCanvas({ onFeatureCount }: MapCanvasProps) {
   const [h3Grid, setH3Grid] = useState<H3Cell[]>([]);
 
   const capasActivas = useLayerStore((s) => s.capasActivas);
-  const baseMap = useLayerStore((s) => s.baseMap);
 
   const modo = useMapModeStore((s) => s.modo);
   const analisisActivo = useMapModeStore((s) => s.analisisActivo);
@@ -57,7 +83,7 @@ export default function MapCanvas({ onFeatureCount }: MapCanvasProps) {
 
     const map = new maplibregl.Map({
       container,
-      style: BASEMAP_STYLES.claro,
+      style: SATELLITE_HYBRID_STYLE,
       center: CDMX_CENTER,
       zoom: 11,
       attributionControl: { compact: true },
@@ -102,19 +128,6 @@ export default function MapCanvas({ onFeatureCount }: MapCanvasProps) {
       mapRef.current = null;
     };
   }, []);
-
-  // ---------------------------------------------------------------------
-  // Cambiar mapa base (preserva capas al re-cargar el estilo)
-  // ---------------------------------------------------------------------
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map || !ready) return;
-    map.setStyle(BASEMAP_STYLES[baseMap]);
-    map.once('style.load', () => {
-      setReady(false);
-      setReady(true);
-    });
-  }, [baseMap]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ---------------------------------------------------------------------
   // Cargar los 5 GeoJSON de establecimientos como fuentes clusterizadas
