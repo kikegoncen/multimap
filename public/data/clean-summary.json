@@ -1,0 +1,27 @@
+[
+  {
+    "giro": "farmacia",
+    "total": 9752,
+    "descartados": 0
+  },
+  {
+    "giro": "cafeteria",
+    "total": 9860,
+    "descartados": 0
+  },
+  {
+    "giro": "minisuper",
+    "total": 3065,
+    "descartados": 0
+  },
+  {
+    "giro": "optica",
+    "total": 2541,
+    "descartados": 0
+  },
+  {
+    "giro": "perfumeria",
+    "total": 4107,
+    "descartados": 0
+  }
+]

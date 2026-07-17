@@ -1,0 +1,40 @@
+{
+  "name": "multimap",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "data:clean": "node scripts/clean-denue.mjs",
+    "data:h3": "node scripts/precompute-h3.mjs",
+    "data:build": "npm run data:clean && npm run data:h3"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.101.2",
+    "@turf/turf": "^7.3.5",
+    "chart.js": "^4.5.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.42.2",
+    "h3-js": "^4.5.0",
+    "lucide-react": "^1.24.0",
+    "maplibre-gl": "^5.24.0",
+    "next": "16.2.10",
+    "react": "19.2.4",
+    "react-chartjs-2": "^5.3.1",
+    "react-dom": "19.2.4",
+    "simple-statistics": "^7.9.3",
+    "zustand": "^5.0.14"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.10",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

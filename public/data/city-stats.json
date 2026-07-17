@@ -1,0 +1,252 @@
+{
+  "totalPorGiro": {
+    "farmacia": 9752,
+    "cafeteria": 9860,
+    "minisuper": 3065,
+    "optica": 2541,
+    "perfumeria": 4107
+  },
+  "totalGeneral": 29325,
+  "topColonias": [
+    {
+      "colonia": "CENTRO",
+      "alcaldia": "Cuauhtémoc",
+      "total": 2250
+    },
+    {
+      "colonia": "MORELOS",
+      "alcaldia": "Cuauhtémoc",
+      "total": 422
+    },
+    {
+      "colonia": "ROMA NORTE",
+      "alcaldia": "Cuauhtémoc",
+      "total": 337
+    },
+    {
+      "colonia": "ZONA CENTRO",
+      "alcaldia": "Venustiano Carranza",
+      "total": 327
+    },
+    {
+      "colonia": "AGRCOLA ORIENTAL",
+      "alcaldia": "Iztacalco",
+      "total": 303
+    },
+    {
+      "colonia": "JUREZ",
+      "alcaldia": "Cuauhtémoc",
+      "total": 236
+    },
+    {
+      "colonia": "DOCTORES",
+      "alcaldia": "Cuauhtémoc",
+      "total": 227
+    },
+    {
+      "colonia": "SANTA MARA LA RIBERA",
+      "alcaldia": "Cuauhtémoc",
+      "total": 188
+    },
+    {
+      "colonia": "EL ROSARIO",
+      "alcaldia": "Azcapotzalco",
+      "total": 188
+    },
+    {
+      "colonia": "DESARROLLO URBANO QUETZALCOATL",
+      "alcaldia": "Iztapalapa",
+      "total": 167
+    },
+    {
+      "colonia": "AGRCOLA PANTITLAN",
+      "alcaldia": "Iztacalco",
+      "total": 165
+    },
+    {
+      "colonia": "CENTRAL DE ABASTO",
+      "alcaldia": "Iztapalapa",
+      "total": 164
+    },
+    {
+      "colonia": "NARVARTE PONIENTE",
+      "alcaldia": "Benito Juárez",
+      "total": 162
+    },
+    {
+      "colonia": "ROMA SUR",
+      "alcaldia": "Cuauhtémoc",
+      "total": 157
+    },
+    {
+      "colonia": "BUENAVISTA",
+      "alcaldia": "Iztapalapa",
+      "total": 151
+    },
+    {
+      "colonia": "CUAUHTMOC",
+      "alcaldia": "La Magdalena Contreras",
+      "total": 150
+    },
+    {
+      "colonia": "AJUSCO",
+      "alcaldia": "Coyoacán",
+      "total": 141
+    },
+    {
+      "colonia": "MOCTEZUMA SEGUNDA SECCIN",
+      "alcaldia": "Venustiano Carranza",
+      "total": 140
+    },
+    {
+      "colonia": "SAN RAFAEL",
+      "alcaldia": "Cuauhtémoc",
+      "total": 139
+    },
+    {
+      "colonia": "SAN MIGUEL",
+      "alcaldia": "Tláhuac",
+      "total": 134
+    }
+  ],
+  "topAlcaldias": [
+    {
+      "alcaldia": "Iztapalapa",
+      "total": 5099
+    },
+    {
+      "alcaldia": "Cuauhtémoc",
+      "total": 5074
+    },
+    {
+      "alcaldia": "Gustavo A. Madero",
+      "total": 3192
+    },
+    {
+      "alcaldia": "Venustiano Carranza",
+      "total": 1904
+    },
+    {
+      "alcaldia": "Benito Juárez",
+      "total": 1898
+    },
+    {
+      "alcaldia": "Coyoacán",
+      "total": 1857
+    },
+    {
+      "alcaldia": "Tlalpan",
+      "total": 1662
+    },
+    {
+      "alcaldia": "Miguel Hidalgo",
+      "total": 1602
+    },
+    {
+      "alcaldia": "Álvaro Obregón",
+      "total": 1448
+    },
+    {
+      "alcaldia": "Azcapotzalco",
+      "total": 1178
+    },
+    {
+      "alcaldia": "Iztacalco",
+      "total": 1098
+    },
+    {
+      "alcaldia": "Tláhuac",
+      "total": 1048
+    },
+    {
+      "alcaldia": "Xochimilco",
+      "total": 967
+    },
+    {
+      "alcaldia": "Cuajimalpa de Morelos",
+      "total": 505
+    },
+    {
+      "alcaldia": "La Magdalena Contreras",
+      "total": 449
+    },
+    {
+      "alcaldia": "Milpa Alta",
+      "total": 344
+    }
+  ],
+  "altasPorAnio": [
+    {
+      "anio": "2010",
+      "total": 8038
+    },
+    {
+      "anio": "2011",
+      "total": 129
+    },
+    {
+      "anio": "2012",
+      "total": 111
+    },
+    {
+      "anio": "2013",
+      "total": 152
+    },
+    {
+      "anio": "2014",
+      "total": 2996
+    },
+    {
+      "anio": "2016",
+      "total": 424
+    },
+    {
+      "anio": "2017",
+      "total": 418
+    },
+    {
+      "anio": "2018",
+      "total": 206
+    },
+    {
+      "anio": "2019",
+      "total": 4969
+    },
+    {
+      "anio": "2020",
+      "total": 237
+    },
+    {
+      "anio": "2021",
+      "total": 74
+    },
+    {
+      "anio": "2022",
+      "total": 10
+    },
+    {
+      "anio": "2023",
+      "total": 611
+    },
+    {
+      "anio": "2024",
+      "total": 9448
+    },
+    {
+      "anio": "2025",
+      "total": 874
+    },
+    {
+      "anio": "2026",
+      "total": 628
+    }
+  ],
+  "alcaldiaMasSaturada": {
+    "alcaldia": "Cuauhtémoc",
+    "isc": 138.5
+  },
+  "alcaldiaMayorOportunidad": {
+    "alcaldia": "Iztacalco",
+    "iom": 85.1
+  }
+}
