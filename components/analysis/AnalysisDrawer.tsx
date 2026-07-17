@@ -40,7 +40,7 @@ export default function AnalysisDrawer() {
             transition={{ duration: 0.2 }}
             className="rounded-2xl bg-white/95 backdrop-blur-md shadow-lg shadow-mm-carbon/10 border border-mm-taupe overflow-hidden"
           >
-            <div className="w-80 max-h-[calc(100vh-8rem)] overflow-y-auto p-4">
+            <div className="w-80 p-4">
               <div className="flex items-center gap-1 mb-4 bg-mm-taupe/40 rounded-xl p-1">
                 {TABS.map(({ id, label, icon: Icon }) => (
                   <button

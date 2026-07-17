@@ -110,7 +110,7 @@ export default function MapCanvas({ onFeatureCount }: MapCanvasProps) {
     const map = mapRef.current;
     if (!map || !ready) return;
     map.setStyle(BASEMAP_STYLES[baseMap]);
-    map.once('styledata', () => {
+    map.once('style.load', () => {
       setReady(false);
       setReady(true);
     });

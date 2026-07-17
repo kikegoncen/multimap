@@ -18,7 +18,7 @@ export default function MapaPage() {
       <MapCanvas onFeatureCount={(giro, count) => setCounts((c) => ({ ...c, [giro]: count }))} />
       <Header />
 
-      <div className="absolute top-20 left-4 z-10 flex flex-col gap-3 max-h-[calc(100vh-6rem)]">
+      <div className="absolute top-20 left-4 z-10 flex flex-col gap-3 max-h-[calc(100vh-6rem)] overflow-y-auto pr-1">
         <LayerControl counts={counts} />
         <AnalysisDrawer />
       </div>

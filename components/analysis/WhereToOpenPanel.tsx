@@ -82,7 +82,9 @@ export default function WhereToOpenPanel() {
           <div className="space-y-1">
             {mejores.map((cell, i) => (
               <div key={cell.h3} className="flex items-center justify-between text-xs">
-                <span className="text-mm-taupe-dark">#{i + 1} · celda {cell.h3.slice(-4)}</span>
+                <span className="text-mm-taupe-dark">
+                  #{i + 1} · {cell.lat.toFixed(4)}, {cell.lng.toFixed(4)}
+                </span>
                 <span className="font-semibold text-mm-mustard tabular-nums">{cell.iom[giroSeleccionado]}</span>
               </div>
             ))}
