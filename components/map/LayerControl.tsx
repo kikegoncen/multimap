@@ -16,7 +16,7 @@ const ICONS: Record<Giro, React.ComponentType<{ size?: number; className?: strin
 const BASEMAPS: { id: BaseMapStyle; label: string; icon: React.ComponentType<{ size?: number }> }[] = [
   { id: 'claro', label: 'Claro', icon: Sun },
   { id: 'oscuro', label: 'Oscuro', icon: Moon },
-  { id: 'satelite', label: 'Voyager', icon: MapIcon },
+  { id: 'satelite', label: 'Color', icon: MapIcon },
 ];
 
 interface LayerControlProps {

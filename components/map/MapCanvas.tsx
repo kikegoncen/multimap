@@ -11,9 +11,9 @@ import { GIRO_CONFIG, type Establecimiento, type EstablecimientoFeature, type Gi
 import { competidoresEnRadio, dbscanClusters, featuresEnViewport } from '@/lib/geo/turf-analysis';
 
 const BASEMAP_STYLES: Record<BaseMapStyle, string> = {
-  claro: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
-  oscuro: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
-  satelite: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
+  claro: 'https://tiles.openfreemap.org/styles/positron',
+  oscuro: 'https://tiles.openfreemap.org/styles/dark',
+  satelite: 'https://tiles.openfreemap.org/styles/liberty',
 };
 
 const CDMX_CENTER: [number, number] = [-99.1332, 19.4326];
