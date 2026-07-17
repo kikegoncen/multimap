@@ -14,7 +14,7 @@ export default function MapaPage() {
   });
 
   return (
-    <main className="relative flex-1 w-full h-screen overflow-hidden">
+    <main className="fixed inset-0 overflow-hidden">
       <MapCanvas onFeatureCount={(giro, count) => setCounts((c) => ({ ...c, [giro]: count }))} />
       <Header />
 
