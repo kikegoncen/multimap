@@ -470,7 +470,7 @@ export default function MapCanvas({ onFeatureCount }: MapCanvasProps) {
     map.flyTo({ center: [featureSeleccionado.lng, featureSeleccionado.lat], zoom: Math.max(map.getZoom(), 15), speed: 1.2 });
   }, [featureSeleccionado]);
 
-  return <div ref={containerRef} className="absolute inset-0" />;
+  return <div ref={containerRef} style={{ position: 'absolute', inset: 0 }} />;
 }
 
 /** Utilidad exportada: competidores de un establecimiento en un radio dado (usada por el panel de detalle). */
