@@ -158,46 +158,90 @@ const maxDensidadPorGiro = Object.fromEntries(
 
 const PESOS = { densidad: 0.3, distancia: 0.2, concentracion: 0.2, diversidad: 0.15, vial: 0.15 };
 
-const h3Grid = cellIds.map((id, idx) => {
-  const [lat, lng] = h3.cellToLatLng(id);
-  const counts = cellMap.get(id).counts;
-  const total = totalesPorCelda[idx];
-  const isc = Number((total / AREA_KM2).toFixed(2));
+// Umbral de actividad comercial real: una celda (+ sus 6 vecinas, ~zona de
+// ~2.2 km² alrededor) necesita al menos este número de establecimientos de
+// CUALQUIER giro para considerarse una zona con demanda real. Por debajo de
+// este umbral, el score se castiga fuerte — la ausencia de competidores en
+// una zona sin actividad comercial no es "oportunidad", es simplemente que
+// ahí no hay nada (una reserva natural, una zona rural, etc.).
+const UMBRAL_ACTIVIDAD_ZONA = 15;
 
-  const establecimientosEnCelda = GIROS.flatMap((g) =>
-    porGiro[g].filter((e) => e.h3 === id),
-  );
+const totalPorCeldaMap = new Map(cellIds.map((id, idx) => [id, totalesPorCelda[idx]]));
+function actividadDeZona(id) {
+  const vecinos = h3.gridDisk(id, 1);
+  return vecinos.reduce((acc, v) => acc + (totalPorCeldaMap.get(v) || 0), 0);
+}
+
+// Paso 1: score crudo (0-1) por celda y giro, con el castigo por falta de
+// actividad comercial real ya aplicado.
+const scoreCrudo = new Map(); // h3 -> { giro: score0a1 }
+
+for (const id of cellIds) {
+  const counts = cellMap.get(id).counts;
+  const establecimientosEnCelda = GIROS.flatMap((g) => porGiro[g].filter((e) => e.h3 === id));
   const coloniasEnCelda = [...new Set(establecimientosEnCelda.map((e) => e.colonia))];
   const concentracionColonia =
     coloniasEnCelda.reduce((acc, c) => acc + (conteoColonia.get(c) || 0), 0) /
     Math.max(1, coloniasEnCelda.length) /
     maxColonia;
 
-  const iom = Object.fromEntries(
-    GIROS.map((g) => {
-      const densidadNorm = normalizar(counts[g], 0, maxDensidadPorGiro[g]);
-      const establecimientosGiroEnCelda = porGiro[g].filter((e) => e.h3 === id);
-      const distProm = establecimientosGiroEnCelda.length
-        ? ss.mean(establecimientosGiroEnCelda.map((e) => e.distCompetidorM))
-        : p95PorGiro[g]; // sin competidores en la celda -> distancia alta (favorable)
-      const distanciaNorm = normalizar(distProm, 0, p95PorGiro[g]);
-      const diversidadNorm = diversidad(counts);
-      const vialNorm = normalizar(
-        establecimientosEnCelda.length, // proxy simple de actividad económica/vial
-        0,
-        20,
-      );
+  const actividadZona = actividadDeZona(id);
+  const factorActividad = Math.min(1, actividadZona / UMBRAL_ACTIVIDAD_ZONA);
+  const castigoZonaSinActividad = 0.15 + 0.85 * factorActividad;
 
-      const score =
-        PESOS.densidad * (1 - densidadNorm) +
+  const porGiroScore = {};
+  for (const g of GIROS) {
+    const densidadNorm = normalizar(counts[g], 0, maxDensidadPorGiro[g]);
+    const establecimientosGiroEnCelda = porGiro[g].filter((e) => e.h3 === id);
+    const distProm = establecimientosGiroEnCelda.length
+      ? ss.mean(establecimientosGiroEnCelda.map((e) => e.distCompetidorM))
+      : p95PorGiro[g];
+    const distanciaNorm = normalizar(distProm, 0, p95PorGiro[g]);
+    const diversidadNorm = diversidad(counts);
+    const vialNorm = normalizar(establecimientosEnCelda.length, 0, 20);
+
+    const score =
+      (PESOS.densidad * (1 - densidadNorm) +
         PESOS.distancia * distanciaNorm +
         PESOS.concentracion * (1 - concentracionColonia) +
         PESOS.diversidad * diversidadNorm +
-        PESOS.vial * vialNorm;
+        PESOS.vial * vialNorm) *
+      castigoZonaSinActividad;
 
-      return [g, Math.round(score * 100)];
-    }),
-  );
+    porGiroScore[g] = score;
+  }
+  scoreCrudo.set(id, porGiroScore);
+}
+
+// Paso 2: convertir a percentil (0-100) dentro de cada giro. Esto garantiza
+// una distribución realista y bien repartida — sólo las zonas relativamente
+// mejores de la ciudad aparecen como "Excelente", en vez de que la fórmula
+// cruda infle casi todo hacia el tope por la tendencia a premiar la simple
+// ausencia de competidores.
+function aPercentiles(valores) {
+  const indicesOrdenados = valores
+    .map((v, i) => [v, i])
+    .sort((a, b) => a[0] - b[0]);
+  const percentiles = new Array(valores.length);
+  indicesOrdenados.forEach(([, i], rank) => {
+    percentiles[i] = Math.round((rank / Math.max(1, valores.length - 1)) * 100);
+  });
+  return percentiles;
+}
+
+const percentilesPorGiro = {};
+for (const g of GIROS) {
+  const valores = cellIds.map((id) => scoreCrudo.get(id)[g]);
+  percentilesPorGiro[g] = aPercentiles(valores);
+}
+
+const h3Grid = cellIds.map((id, idx) => {
+  const [lat, lng] = h3.cellToLatLng(id);
+  const counts = cellMap.get(id).counts;
+  const total = totalesPorCelda[idx];
+  const isc = Number((total / AREA_KM2).toFixed(2));
+
+  const iom = Object.fromEntries(GIROS.map((g) => [g, percentilesPorGiro[g][idx]]));
 
   return {
     h3: id,
