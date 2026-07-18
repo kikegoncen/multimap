@@ -10,10 +10,10 @@ interface LayerState {
 export const useLayerStore = create<LayerState>((set) => ({
   capasActivas: {
     farmacia: true,
-    cafeteria: true,
-    minisuper: true,
-    optica: true,
-    perfumeria: true,
+    cafeteria: false,
+    minisuper: false,
+    optica: false,
+    perfumeria: false,
   },
   toggleCapa: (giro) =>
     set((s) => ({ capasActivas: { ...s.capasActivas, [giro]: !s.capasActivas[giro] } })),
