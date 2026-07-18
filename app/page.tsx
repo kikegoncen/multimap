@@ -44,10 +44,10 @@ export default function Home() {
           className="relative rounded-2xl mb-6 shadow-2xl shadow-black/40"
         />
         <h1 className="relative text-center text-4xl md:text-6xl font-extrabold tracking-tight max-w-3xl leading-[1.1]">
-          El mapa de los negocios más rentables de la <span className="text-mm-mustard">Ciudad de México</span>
+          Los 5 negocios más rentables de la <span className="text-mm-mustard">Ciudad de México</span>
         </h1>
         <p className="relative text-center text-mm-taupe-dark text-lg mt-5 max-w-xl">
-          Geomarketing para todos. Datos reales del DENUE, analizados con algoritmos espaciales reales.
+          Geomarketing para todos. Datos reales del censo económico, analizados con algoritmos espaciales reales.
         </p>
 
         <div className="relative flex flex-col sm:flex-row items-center gap-3 mt-8">
