@@ -152,6 +152,7 @@ export default function MapCanvas({ onFeatureCount }: MapCanvasProps) {
 
         const sourceId = `src-${giro}`;
         const color = GIRO_CONFIG[giro].color;
+        const visibilidadInicial = useLayerStore.getState().capasActivas[giro] ? 'visible' : 'none';
 
         if (!map.getSource(sourceId)) {
           map.addSource(sourceId, {
@@ -167,6 +168,7 @@ export default function MapCanvas({ onFeatureCount }: MapCanvasProps) {
             type: 'circle',
             source: sourceId,
             filter: ['has', 'point_count'],
+            layout: { visibility: visibilidadInicial },
             paint: {
               'circle-color': color,
               'circle-opacity': 0.85,
@@ -182,6 +184,7 @@ export default function MapCanvas({ onFeatureCount }: MapCanvasProps) {
             source: sourceId,
             filter: ['has', 'point_count'],
             layout: {
+              visibility: visibilidadInicial,
               'text-field': ['get', 'point_count_abbreviated'],
               'text-font': ['Noto Sans Bold'],
               'text-size': 12,
@@ -194,6 +197,7 @@ export default function MapCanvas({ onFeatureCount }: MapCanvasProps) {
             type: 'circle',
             source: sourceId,
             filter: ['!', ['has', 'point_count']],
+            layout: { visibility: visibilidadInicial },
             paint: {
               'circle-color': color,
               'circle-radius': 6,
