@@ -44,10 +44,12 @@ const SATELLITE_HYBRID_STYLE: StyleSpecification = {
 };
 
 // Centro por defecto: la celda H3 con más farmacias (Centro Histórico / zona
-// aledaña al Zócalo), calculado a partir de public/data/h3-grid.json. Zoom
-// 16.5 = 11 (zoom base anterior) * 1.5, un 50% más de acercamiento.
+// aledaña al Zócalo), calculado a partir de public/data/h3-grid.json.
 const CDMX_CENTER: [number, number] = [-99.121521, 19.427119];
-const ZOOM_INICIAL = 16.5;
+// Zoom inicial ajustado para coincidir con la referencia visual solicitada:
+// vista amplia del Centro Histórico donde los negocios cercanos aún se
+// agrupan en clústeres (justo en el umbral clusterMaxZoom de las capas).
+const ZOOM_INICIAL = 15;
 const GIROS: Giro[] = ['farmacia', 'cafeteria', 'minisuper', 'optica', 'perfumeria'];
 
 interface MapCanvasProps {
