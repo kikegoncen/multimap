@@ -86,20 +86,24 @@ function normalizarTexto(str) {
 
 /**
  * Algunos archivos fuente mezclan, bajo el mismo giro, actividades SCIAN
- * adyacentes que NO son el giro real. Se confirmó con los datos: el archivo
- * de farmacias trae 2,302 registros de "Comercio al por menor de productos
- * naturistas, medicamentos homeopáticos..." — que no son farmacias. Se
- * filtra por la descripción oficial de actividad (nombre_act) del DENUE,
- * exigiendo que contenga la palabra clave real del giro.
+ * adyacentes que NO son el giro real (se confirmó con los datos: farmacias
+ * traía 2,302 registros de "productos naturistas/homeopáticos"). Por
+ * instrucción explícita, para farmacias el filtro se hace sobre el NOMBRE
+ * del establecimiento (nom_estab), exigiendo que contenga la palabra
+ * "farmacia"/"farmacias".
  */
 const PALABRA_CLAVE_POR_GIRO = {
-  farmacia: 'farmacia',
+  farmacia: 'farmacia', // coincide con "farmacia" y "farmacias" (substring)
+};
+const CAMPO_FILTRO_POR_GIRO = {
+  farmacia: 'nom_estab',
 };
 
 function actividadCoincideConGiro(p, giro) {
   const palabraClave = PALABRA_CLAVE_POR_GIRO[giro];
   if (!palabraClave) return true; // giros sin ambigüedad conocida: no se filtra
-  return normalizarTexto(p.nombre_act).includes(palabraClave);
+  const campo = CAMPO_FILTRO_POR_GIRO[giro] || 'nombre_act';
+  return normalizarTexto(p[campo]).includes(palabraClave);
 }
 
 function normalizeFeature(feature, giro) {
