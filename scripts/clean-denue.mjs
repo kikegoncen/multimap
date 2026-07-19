@@ -77,11 +77,39 @@ function buildDireccion(p) {
   return fixEncoding(partes.join(' ')) || 'Sin dirección registrada';
 }
 
+function normalizarTexto(str) {
+  return (str || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, ''); // quita acentos para comparar
+}
+
+/**
+ * Algunos archivos fuente mezclan, bajo el mismo giro, actividades SCIAN
+ * adyacentes que NO son el giro real. Se confirmó con los datos: el archivo
+ * de farmacias trae 2,302 registros de "Comercio al por menor de productos
+ * naturistas, medicamentos homeopáticos..." — que no son farmacias. Se
+ * filtra por la descripción oficial de actividad (nombre_act) del DENUE,
+ * exigiendo que contenga la palabra clave real del giro.
+ */
+const PALABRA_CLAVE_POR_GIRO = {
+  farmacia: 'farmacia',
+};
+
+function actividadCoincideConGiro(p, giro) {
+  const palabraClave = PALABRA_CLAVE_POR_GIRO[giro];
+  if (!palabraClave) return true; // giros sin ambigüedad conocida: no se filtra
+  return normalizarTexto(p.nombre_act).includes(palabraClave);
+}
+
 function normalizeFeature(feature, giro) {
   const p = feature.properties || {};
   const lat = Number(p.latitud);
   const lng = Number(p.longitud);
   if (!Number.isFinite(lat) || !Number.isFinite(lng) || (lat === 0 && lng === 0)) {
+    return null;
+  }
+  if (!actividadCoincideConGiro(p, giro)) {
     return null;
   }
 
