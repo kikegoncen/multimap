@@ -301,33 +301,33 @@ export default function MapCanvas({ onFeatureCount }: MapCanvasProps) {
           type: 'heatmap',
           paint: {
             'heatmap-weight': 1,
-            // A nivel ciudad (zoom bajo) se necesita mucha más concentración
-            // real para llegar al tope del color; conforme haces zoom, un
-            // punto individual pesa más — así siempre se ve gradiente, nunca
-            // todo saturado al máximo.
+            // Punto medio entre "todo satura a negro" y "casi invisible":
+            // suficiente intensidad para que las zonas calientes se noten a
+            // escala ciudad, sin que el área construida completa llegue al
+            // tope del color.
             'heatmap-intensity': [
               'interpolate', ['linear'], ['zoom'],
-              10, 0.25,
-              13, 0.6,
-              15, 1.2,
-              17, 2.2,
+              10, 0.55,
+              13, 1.0,
+              15, 1.7,
+              17, 2.6,
             ],
             'heatmap-radius': [
               'interpolate', ['linear'], ['zoom'],
-              10, 3,
-              13, 8,
-              15, 16,
-              17, 26,
+              10, 7,
+              13, 13,
+              15, 19,
+              17, 28,
             ],
-            'heatmap-opacity': 0.75,
+            'heatmap-opacity': 0.85,
             'heatmap-color': [
               'interpolate', ['linear'], ['heatmap-density'],
-              0, 'rgba(250,250,247,0)',
-              0.2, '#E8E2D9',
-              0.4, '#F0D264',
-              0.6, '#E0A94C',
-              0.8, '#C4634A',
-              1, '#2E2A26',
+              0, 'rgba(76,140,168,0)',
+              0.15, 'rgba(76,140,168,0.65)',
+              0.35, '#5FA878',
+              0.55, '#F0D264',
+              0.75, '#E0A94C',
+              1, '#C4634A',
             ],
           },
         });
