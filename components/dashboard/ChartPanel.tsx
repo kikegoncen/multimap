@@ -19,15 +19,20 @@ ChartJS.register(ArcElement, BarElement, LineElement, PointElement, CategoryScal
 
 const FONT = { family: 'Inter, ui-sans-serif, system-ui, sans-serif', size: 11 };
 
-export function MixDeGirosChart({ totalPorGiro }: { totalPorGiro: Record<Giro, number> }) {
-  const giros = Object.keys(GIRO_CONFIG) as Giro[];
+export function MixDeGirosChart({
+  giros,
+  totalPorGiro,
+}: {
+  giros: Giro[];
+  totalPorGiro: Partial<Record<Giro, number>>;
+}) {
   return (
     <Doughnut
       data={{
         labels: giros.map((g) => GIRO_CONFIG[g].label),
         datasets: [
           {
-            data: giros.map((g) => totalPorGiro[g]),
+            data: giros.map((g) => totalPorGiro[g] ?? 0),
             backgroundColor: giros.map((g) => GIRO_CONFIG[g].color),
             borderColor: '#FAFAF7',
             borderWidth: 2,
