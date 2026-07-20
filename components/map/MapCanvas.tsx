@@ -301,8 +301,24 @@ export default function MapCanvas({ onFeatureCount }: MapCanvasProps) {
           type: 'heatmap',
           paint: {
             'heatmap-weight': 1,
-            'heatmap-intensity': 1.1,
-            'heatmap-radius': 22,
+            // A nivel ciudad (zoom bajo) se necesita mucha más concentración
+            // real para llegar al tope del color; conforme haces zoom, un
+            // punto individual pesa más — así siempre se ve gradiente, nunca
+            // todo saturado al máximo.
+            'heatmap-intensity': [
+              'interpolate', ['linear'], ['zoom'],
+              10, 0.25,
+              13, 0.6,
+              15, 1.2,
+              17, 2.2,
+            ],
+            'heatmap-radius': [
+              'interpolate', ['linear'], ['zoom'],
+              10, 3,
+              13, 8,
+              15, 16,
+              17, 26,
+            ],
             'heatmap-opacity': 0.75,
             'heatmap-color': [
               'interpolate', ['linear'], ['heatmap-density'],
